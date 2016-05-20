@@ -6,9 +6,10 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <uses-feature android:name="android.hardware.camera" />
 
     <application
@@ -27,11 +28,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:name=".MainFragment"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".AccountManagement"
             android:label="@string/title_activity_account_management"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
