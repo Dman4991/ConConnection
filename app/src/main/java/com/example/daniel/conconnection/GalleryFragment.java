@@ -7,9 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * Created by ianberger on 5/20/16.
- */
+
 public class GalleryFragment extends Fragment {
     public static GalleryFragment newInstance(){
         GalleryFragment fragment = new GalleryFragment();
