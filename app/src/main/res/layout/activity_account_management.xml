@@ -25,10 +25,20 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+
             android:id="@+id/acount_login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Account Create/Edit"
+                android:id="@+id/textAccoutCreateEdit"
+                android:layout_gravity="center_horizontal" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"

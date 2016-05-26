@@ -13,6 +13,8 @@ public class AccountManagement extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //should check for local file of user info on login
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_management);
 
@@ -20,7 +22,6 @@ public class AccountManagement extends AppCompatActivity {
         View mAgeView = (EditText) findViewById(R.id.age);
         View mBioView = (EditText) findViewById(R.id.bio);
         View mBodytypeView = (EditText) findViewById(R.id.bodytype);
-
 
     }
 }
