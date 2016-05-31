@@ -1,7 +1,6 @@
 package com.example.daniel.conconnection;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -9,7 +8,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,11 +21,11 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MainFragment extends android.support.v4.app.Fragment {
+public class CheckInFragment extends android.support.v4.app.Fragment {
 
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     private Uri fileUri;
-    private ImageView potentialMatchPicture;
+    private ImageView userPicture;
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
 
@@ -72,19 +70,19 @@ public class MainFragment extends android.support.v4.app.Fragment {
     }
 
 
-    public static MainFragment newInstance(){
-        MainFragment fragment = new MainFragment();
+    public static CheckInFragment newInstance(){
+        CheckInFragment fragment = new CheckInFragment();
         return fragment;
     }
-    public MainFragment(){}
+    public CheckInFragment(){}
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-    //super.onActivityCreated(savedInstanceState);
+        //super.onActivityCreated(savedInstanceState);
 
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_check_in, container, false);
 //
 //        /*
 //            Code for GPS location initialization/call
@@ -135,26 +133,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
 //        Log.i("GPS", "After GPS request");
 
 
-        Button yesButton = (Button) rootView.findViewById(R.id.yesButton);
-        Button noButton = (Button) rootView.findViewById(R.id.noButton);
-        potentialMatchPicture = (ImageView) rootView.findViewById(R.id.potentialMatchPicture);
-
-        yesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO mark as a match in database, get next potential match picture and info
-                potentialMatchPicture.setImageResource(R.mipmap.ic_launcher);
-            }
-        });
-
-        noButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO mark as not a match in database, get next potential match picture and info
-                potentialMatchPicture.setImageResource(R.drawable.housingicon);
-            }
-        });
-
+        userPicture = (ImageView) rootView.findViewById(R.id.userPicture);
 
         Button takePictureButton = (Button) rootView.findViewById(R.id.takePictureButton);
         takePictureButton.setOnClickListener(new View.OnClickListener() {
@@ -187,7 +166,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
             if (resultCode == Activity.RESULT_OK) {
                 try {
                     Bitmap photo = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), fileUri);
-                    potentialMatchPicture.setImageBitmap(photo);
+                    userPicture.setImageBitmap(photo);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (IOException e) {

@@ -28,10 +28,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainFragment"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".AccountManagement"
+            android:name=".AccountManagementFragment"
             android:label="@string/title_activity_account_management"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

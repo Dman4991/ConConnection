@@ -41,6 +41,14 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+        //Display matching fragment by default
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_frame, MatchingFragment.newInstance())
+                .commit();
+        getSupportActionBar().setTitle("Matches");
     }
 
     @Override
@@ -82,30 +90,27 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_matches) {
 //            fragmentManager.beginTransaction()
 //                    .remove(fragmentManager.findFragmentById(R.id.content_frame))
 //                    .commit();
             fragmentManager.beginTransaction()
-                    .replace(R.id.content_frame, MainFragment.newInstance())
+                    .replace(R.id.content_frame, MatchingFragment.newInstance())
                     .commit();
-            getSupportActionBar().setTitle("Main Fragment");
-        } else if (id == R.id.nav_gallery) {
+            getSupportActionBar().setTitle("Matches");
+        } else if (id == R.id.nav_check_in) {
 //            fragmentManager.beginTransaction()
 //                    .remove(fragmentManager.findFragmentById(R.id.content_frame))
 //                    .commit();
             fragmentManager.beginTransaction()
-                    .replace(R.id.content_frame, GalleryFragment.newInstance())
+                    .replace(R.id.content_frame, CheckInFragment.newInstance())
                     .commit();
-            getSupportActionBar().setTitle("Gallery");
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+            getSupportActionBar().setTitle("Check In");
+        } else if (id == R.id.nav_accout_management) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_frame, AccountManagementFragment.newInstance())
+                    .commit();
+            getSupportActionBar().setTitle("Account Management");
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
