@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity
         //Display matching fragment by default
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, MatchingFragment.newInstance())
+                .replace(R.id.content_frame, MatchingFragment.getInstance())
                 .commit();
         getSupportActionBar().setTitle("Matches");
     }
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity
 //                    .remove(fragmentManager.findFragmentById(R.id.content_frame))
 //                    .commit();
             fragmentManager.beginTransaction()
-                    .replace(R.id.content_frame, MatchingFragment.newInstance())
+                    .replace(R.id.content_frame, MatchingFragment.getInstance())
                     .commit();
             getSupportActionBar().setTitle("Matches");
         } else if (id == R.id.nav_check_in) {
@@ -103,12 +103,12 @@ public class MainActivity extends AppCompatActivity
 //                    .remove(fragmentManager.findFragmentById(R.id.content_frame))
 //                    .commit();
             fragmentManager.beginTransaction()
-                    .replace(R.id.content_frame, CheckInFragment.newInstance())
+                    .replace(R.id.content_frame, CheckInFragment.getInstance())
                     .commit();
             getSupportActionBar().setTitle("Check In");
         } else if (id == R.id.nav_accout_management) {
             fragmentManager.beginTransaction()
-                    .replace(R.id.content_frame, AccountManagementFragment.newInstance())
+                    .replace(R.id.content_frame, AccountManagementFragment.getInstance())
                     .commit();
             getSupportActionBar().setTitle("Account Management");
         }

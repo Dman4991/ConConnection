@@ -3,6 +3,7 @@ package com.example.daniel.conconnection;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -22,12 +23,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MatchingFragment extends android.support.v4.app.Fragment {
+    private static MatchingFragment instance;
 
     private ImageView potentialMatchPicture;
+    private Bitmap potentialMatchBitmap;
 
-    public static MatchingFragment newInstance(){
-        MatchingFragment fragment = new MatchingFragment();
-        return fragment;
+    public static MatchingFragment getInstance(){
+        if(instance == null)
+            instance = new MatchingFragment();
+        return instance;
     }
     public MatchingFragment(){}
 
@@ -42,12 +46,17 @@ public class MatchingFragment extends android.support.v4.app.Fragment {
         Button yesButton = (Button) rootView.findViewById(R.id.yesButton);
         Button noButton = (Button) rootView.findViewById(R.id.noButton);
         potentialMatchPicture = (ImageView) rootView.findViewById(R.id.userPicture);
+        if(potentialMatchBitmap != null){//Restore bitmap if it was previously set before being inflated
+            potentialMatchPicture.setImageBitmap(potentialMatchBitmap);
+        }
 
         yesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO mark as a match in database, get next potential match picture and info
                 potentialMatchPicture.setImageResource(R.mipmap.ic_launcher);
+                potentialMatchPicture.buildDrawingCache();//TODO check memory usage
+                potentialMatchBitmap = Bitmap.createBitmap(potentialMatchPicture.getDrawingCache());
             }
         });
 
@@ -56,6 +65,8 @@ public class MatchingFragment extends android.support.v4.app.Fragment {
             public void onClick(View v) {
                 //TODO mark as not a match in database, get next potential match picture and info
                 potentialMatchPicture.setImageResource(R.drawable.housingicon);
+                potentialMatchPicture.buildDrawingCache();//TODO check memory usage
+                potentialMatchBitmap = Bitmap.createBitmap(potentialMatchPicture.getDrawingCache());
             }
         });
 

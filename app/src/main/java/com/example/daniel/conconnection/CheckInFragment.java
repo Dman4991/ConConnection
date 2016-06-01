@@ -22,10 +22,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class CheckInFragment extends android.support.v4.app.Fragment {
+    private static CheckInFragment instance;
 
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     private Uri fileUri;
     private ImageView userPicture;
+    private Bitmap userPictureBitmap = null;
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
 
@@ -70,9 +72,10 @@ public class CheckInFragment extends android.support.v4.app.Fragment {
     }
 
 
-    public static CheckInFragment newInstance(){
-        CheckInFragment fragment = new CheckInFragment();
-        return fragment;
+    public static CheckInFragment getInstance(){
+        if(instance == null)
+            instance = new CheckInFragment();
+        return instance;
     }
     public CheckInFragment(){}
 
@@ -134,6 +137,9 @@ public class CheckInFragment extends android.support.v4.app.Fragment {
 
 
         userPicture = (ImageView) rootView.findViewById(R.id.userPicture);
+        if(userPictureBitmap != null){//Restore bitmap if it was previously set before being inflated
+            userPicture.setImageBitmap(userPictureBitmap);
+        }
 
         Button takePictureButton = (Button) rootView.findViewById(R.id.takePictureButton);
         takePictureButton.setOnClickListener(new View.OnClickListener() {
@@ -165,8 +171,8 @@ public class CheckInFragment extends android.support.v4.app.Fragment {
             // Make sure the request was successful
             if (resultCode == Activity.RESULT_OK) {
                 try {
-                    Bitmap photo = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), fileUri);
-                    userPicture.setImageBitmap(photo);
+                    userPictureBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), fileUri);
+                    userPicture.setImageBitmap(userPictureBitmap);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (IOException e) {

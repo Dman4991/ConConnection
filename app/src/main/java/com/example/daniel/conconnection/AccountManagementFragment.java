@@ -10,10 +10,12 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
 public class AccountManagementFragment extends Fragment {
+    private static AccountManagementFragment instance;
 
-    public static AccountManagementFragment newInstance(){
-        AccountManagementFragment fragment = new AccountManagementFragment();
-        return fragment;
+    public static AccountManagementFragment getInstance(){
+        if(instance == null)
+            instance = new AccountManagementFragment();
+        return instance;
     }
     public AccountManagementFragment(){}
 
