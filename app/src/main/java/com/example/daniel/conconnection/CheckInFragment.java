@@ -1,13 +1,17 @@
 package com.example.daniel.conconnection;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,13 +34,17 @@ public class CheckInFragment extends android.support.v4.app.Fragment {
     private Bitmap userPictureBitmap = null;
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
+    public static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 3;
 
     /** Create a file Uri for saving an image or video */
-    private static Uri getOutputMediaFileUri(int type){
+    private Uri getOutputMediaFileUri(int type){
         return Uri.fromFile(getOutputMediaFile(type));
     }
+
+
+
     /** Create a File for saving an image or video */
-    private static File getOutputMediaFile(int type){
+    private File getOutputMediaFile(int type){
         if(!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
             throw new RuntimeException("External Storage State: " + Environment.getExternalStorageState());
         }
@@ -48,7 +56,10 @@ public class CheckInFragment extends android.support.v4.app.Fragment {
 
         // Create the storage directory if it does not exist
         if (! mediaStorageDir.exists()){
+            checkWritePermissions();
+            //Attempt to make mediaStorageDir if it doesn't exist
             if (! mediaStorageDir.mkdirs()){
+                //crash if unable
                 Log.d("MyCameraApp", "failed to create directory");
                 throw new RuntimeException("failed to create directory: " + mediaStorageDir.getPath());
                 //return null;
@@ -69,6 +80,62 @@ public class CheckInFragment extends android.support.v4.app.Fragment {
         }
 
         return mediaFile;
+    }
+
+    private void checkWritePermissions(){
+        //Check WRITE_EXTERNAL_STORAGE permission
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+
+                // MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+                    throw new RuntimeException("WRITE_EXTERNAL_STORAGE permission not granted.");
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 
 
