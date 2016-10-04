@@ -1,11 +1,22 @@
 package com.example.daniel.conconnection;
 
+import java.io.Serializable;
+
 /**
  * Created by Daniel on 4/7/2016.
  */
-public interface User {
+public interface User{
+    String getEmail();
+    String getPassword();
     String getName();
-    int getAge();
+    short getAge();
     String getBodyType();
     String getBiography();
+
+    void setEmail(String email);
+    void setPassword(String password);
+    void setName(String name);
+    void setAge(short age);
+    void setBodyType(String bodyType);
+    void setBiography(String biography);
 }

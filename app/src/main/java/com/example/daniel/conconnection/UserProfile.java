@@ -2,26 +2,35 @@ package com.example.daniel.conconnection;
 
 import android.util.Log;
 
-import java.lang.reflect.Array;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class UserProfile implements User{
+public class UserProfile implements User, Serializable{
+    private String email;
+    private String password;
     private String name;
     private short age;
     private String bodyType;
     private String biography;
     private ArrayList<Integer> events;
     private ArrayList<Integer> matches;
+    private boolean autoLogin;
+
 
     public UserProfile(){
+        email = null;
+        password = null;
         name = null;
         age = 0;
         bodyType = null;
         biography = null;
         events = null;
+        autoLogin = false;
     }
 
-    public UserProfile(String name, short age, String bodyType, String biography, ArrayList<Integer> myEvents){
+    public UserProfile(String email, String password, String name, short age, String bodyType, String biography, ArrayList<Integer> myEvents){
+        this.email = email;
+        this.password = password;
         this.name = name;
         this.age = age;
         this.bodyType = bodyType;
@@ -65,15 +74,21 @@ public class UserProfile implements User{
         }
     }
 
+    public String getEmail(){return email;}
+    public String getPassword(){return password;}
     public String getName(){return name;}
-    public int getAge(){return age;}
+    public short getAge(){return age;}
     public String getBodyType(){return bodyType;}
     public String getBiography(){return biography;}
     public ArrayList<Integer> getEvents(){return events;}
     public ArrayList<Integer> getMatches(){return matches;}
+    public boolean getAutoLogin(){return autoLogin;}
 
+    public void setEmail(String email){this.email = email;}
+    public void setPassword(String password){this.password = password;}
     public void setName(String name){this.name = name;}
     public void setAge(short age){this.age = age;}
     public void setBodyType(String bodyType){this.bodyType = bodyType;}
     public void setBiography(String biography){this.biography = biography;}
+    public void setAutoLogin(boolean autoLogin){this.autoLogin = autoLogin;}
 }
