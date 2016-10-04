@@ -74,6 +74,11 @@ public class UserProfile implements User, Serializable{
         }
     }
 
+    @Override
+    public String toString() {
+        return email + " " + password + " " + name + " "+ age + " "+ bodyType + " "+ biography;
+    }
+
     public String getEmail(){return email;}
     public String getPassword(){return password;}
     public String getName(){return name;}
