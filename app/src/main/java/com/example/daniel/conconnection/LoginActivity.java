@@ -2,6 +2,7 @@ package com.example.daniel.conconnection;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -11,8 +12,14 @@ import android.view.View.OnClickListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.firebase.client.Firebase;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -49,6 +56,8 @@ public class LoginActivity extends AppCompatActivity{
     //for accessing firebase
     private Firebase myFirebaseRef = null;
     private String userExtension = "/users/";
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
 
     //local variables
     private boolean newUser = false;
@@ -60,40 +69,88 @@ public class LoginActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
         //firebase preliminary code
-        Firebase.setAndroidContext(this);
-        myFirebaseRef = new Firebase("https://sizzling-torch-7552.firebaseio.com");
+//        Firebase.setAndroidContext(this);
+//        myFirebaseRef = new Firebase("https://sizzling-torch-7552.firebaseio.com");
+        mAuth = FirebaseAuth.getInstance();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        if(isNewUser()) {
-            //set next activity to be AccountManagement
-            nextIntent = new Intent(getBaseContext(), AccountManagementFragment.class);
-        }
-        else{
-            //attempt login via file
-            attemptLoginExistingUser();
-        }
+//        if(isNewUser()) {
+//            //set next activity to be AccountManagement
+//            nextIntent = new Intent(getBaseContext(), AccountManagementFragment.class);
+//        }
+//        else{
+//            //attempt login via file
+//            attemptLoginExistingUser();
+//        }
 
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mPasswordView = (EditText) findViewById(R.id.password);
 
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         assert mEmailSignInButton != null;
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                nextIntent = new Intent(getBaseContext(), MainActivity.class);
-                startActivity(nextIntent);
-                /*try {
-                    Log.d("Login","New user login");
-                    attemptLoginNewUser();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }*/
+                Log.d("signIn", "clicked");
+                String email = mEmailView.getText().toString();
+                String password = mPasswordView.getText().toString();
+                Log.d("signIn", "email: " + email + email.length());
+                Log.d("signIn", "password: " + password + password.length());
+                //Input validation
+                if(email.length()==0 && password.length()==0){
+                    Toast.makeText(LoginActivity.this, "enter your email & password", Toast.LENGTH_SHORT).show();
+                } else if(email.length()==0){
+                    Toast.makeText(LoginActivity.this, "enter your email", Toast.LENGTH_SHORT).show();
+                } else if(password.length()==0){
+                    Toast.makeText(LoginActivity.this, "enter your password", Toast.LENGTH_SHORT).show();
+                } else {
+                    //Valid input, attempt login
+
+                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            Log.d("signIn", "signInWithEmail:onComplete:" + task.isSuccessful());
+                            // If sign in fails, display a message to the user. If sign in succeeds
+                            // the auth state listener will be notified and logic to handle the
+                            // signed in user can be handled in the listener.
+                            if (!task.isSuccessful()) {
+                                Log.w("signIn", "signInWithEmail:failed", task.getException());
+                                Toast.makeText(LoginActivity.this, "do", Toast.LENGTH_SHORT).show();
+                            } else {//Logged in
+                                nextIntent = new Intent(getBaseContext(), MainActivity.class);
+                                startActivity(nextIntent);
+                            }
+                        }
+
+
+                    });
+                    /*try {
+                        Log.d("Login","New user login");
+                        attemptLoginNewUser();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }*/
+                }
             }
         });
 
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    Log.d("mAuthListener", "onAuthStateChanged:signed_in:" + user.getUid());
+                } else {
+                    // User is signed out
+                    Log.d("mAuthListener", "onAuthStateChanged:signed_out");
+                }
+                // ...
+            }
+        };
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
@@ -122,7 +179,7 @@ public class LoginActivity extends AppCompatActivity{
                 Log.d("File", "Trying to write to file");
                 ObjectOutputStream outputStream = new ObjectOutputStream(context.openFileOutput(userFile, Context.MODE_PRIVATE));
                 //following 2 lines are for testing
-                user.setEmail("userEmail@test.com");
+                user.setEmail("useremail@test.com");
                 user.setPassword("userPassword");
                 outputStream.writeObject(user);
                 outputStream.close();

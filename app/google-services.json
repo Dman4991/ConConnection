@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1061313922621",
+    "firebase_url": "https://conconnection-33940.firebaseio.com",
+    "project_id": "conconnection-33940",
+    "storage_bucket": "conconnection-33940.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1061313922621:android:56008f0d1dee2349",
+        "android_client_info": {
+          "package_name": "com.example.daniel.conconnection"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1061313922621-g0nrb4hv95e790mp6c4p1jkd0ugdp1h2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMLgWqas0mjfl76GwP0uOvR-0TVZ-_pqE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

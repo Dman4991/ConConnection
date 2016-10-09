@@ -50,7 +50,12 @@ public class CheckInFragment extends android.support.v4.app.Fragment {
         }
 
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), "MyCameraApp");
+                Environment.DIRECTORY_PICTURES), "ConConnection");
+        File[] files = mediaStorageDir.listFiles();
+        if(files !=null)
+            for(File file: files){
+                Log.d("mediaStorageFiles", file.getName());
+            }
         // This location works best if you want the created images to be shared
         // between applications and persist after your app has been uninstalled.
 
@@ -60,7 +65,7 @@ public class CheckInFragment extends android.support.v4.app.Fragment {
             //Attempt to make mediaStorageDir if it doesn't exist
             if (! mediaStorageDir.mkdirs()){
                 //crash if unable
-                Log.d("MyCameraApp", "failed to create directory");
+                Log.d("ConConnection", "failed to create directory");
                 throw new RuntimeException("failed to create directory: " + mediaStorageDir.getPath());
                 //return null;
             }
