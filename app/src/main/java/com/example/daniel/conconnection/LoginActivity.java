@@ -21,13 +21,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-
 
 /**
  * A login screen that offers login via email/password.
@@ -54,20 +48,24 @@ public class LoginActivity extends AppCompatActivity{
     private View mLoginFormView;
 
     //for accessing firebase
-    private Firebase myFirebaseRef = null;
-    private String userExtension = "/users/";
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
     //local variables
     private boolean newUser = false;
     private User user = new UserProfile();
+    private FileManager fileManager;
+    private Context context;
 
     private Intent nextIntent = null;
-    private String userFile = "userFile.txt";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
+        context = getApplicationContext();
+        fileManager = new FileManager(context);
+        //following line is for testing new user data, deleteFile() is a private method, make public to test new user data
+        //fileManager.deleteFile();
+
         //firebase preliminary code
 //        Firebase.setAndroidContext(this);
 //        myFirebaseRef = new Firebase("https://sizzling-torch-7552.firebaseio.com");
@@ -76,14 +74,15 @@ public class LoginActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-//        if(isNewUser()) {
-//            //set next activity to be AccountManagement
-//            nextIntent = new Intent(getBaseContext(), AccountManagementFragment.class);
-//        }
-//        else{
-//            //attempt login via file
-//            attemptLoginExistingUser();
-//        }
+        if(!isNewUser()){
+            //currently there is no way for user to set autologin back to true once they hit the logout button which sets it to false
+            //Following line is to force auto login if a user file exist, TODO delete following line once we understand how we want to logoff
+            user.setAutoLogin(true);
+            if(user.getAutoLogin()){
+                attemptLoginExistingUser();
+            }
+            //else do nothing, user manually logged off on last session
+        }
 
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -94,6 +93,14 @@ public class LoginActivity extends AppCompatActivity{
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                /*
+                user.setEmail("myemail@example.com");
+                user.setPassword("mypassword");
+                fileManager.writeUserToFile(user);
+                nextIntent = new Intent(getBaseContext(), MainActivity.class);
+                startActivity(nextIntent);
+                */
+
                 Log.d("signIn", "clicked");
                 String email = mEmailView.getText().toString();
                 String password = mPasswordView.getText().toString();
@@ -124,8 +131,6 @@ public class LoginActivity extends AppCompatActivity{
                                 startActivity(nextIntent);
                             }
                         }
-
-
                     });
                     /*try {
                         Log.d("Login","New user login");
@@ -158,49 +163,20 @@ public class LoginActivity extends AppCompatActivity{
 
     public boolean isNewUser(){
         //check if user file exists to auto login
-        FileInputStream localUserFile = null;
-        try {
-            localUserFile = openFileInput(userFile);
-        } catch (FileNotFoundException e) {
-            Log.d("File", "User file was not found");
-
-            Context context = getApplicationContext();
-
-            //create file
-            File file = new File(context.getFilesDir().getAbsolutePath(), userFile);
-            try{
-                file.createNewFile();
-                Log.d("File", "Created new file");
-            }catch (Exception f){
-                Log.e("File", "Failed to create new file", f);
-            }
-
-            try {
-                Log.d("File", "Trying to write to file");
-                ObjectOutputStream outputStream = new ObjectOutputStream(context.openFileOutput(userFile, Context.MODE_PRIVATE));
-                //following 2 lines are for testing
-                user.setEmail("useremail@test.com");
-                user.setPassword("userPassword");
-                outputStream.writeObject(user);
-                outputStream.close();
-                Log.d("File", "Wrote user to file");
-            }catch (Exception e1){
-                Log.e("File", "Filed to write user object to file", e1);
-            }
-
-            newUser = true;
-            return true;
-        }
-
         //if file was found
-        if(localUserFile!=null){
+        if(fileManager.doesFileExist()){
             //login with file
             Log.d("File", "User file was found");
             newUser = false;
             return false;
+        }//if file was not found
+        else{
+            Log.d("File", "User file was not found");
+            fileManager.writeUserToFile(user);
+            return true;
         }
-        return false;
     }
+
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
@@ -210,7 +186,7 @@ public class LoginActivity extends AppCompatActivity{
         // if (mAuthTask != null) {
         //     return;
         // }
-
+        /*
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
@@ -245,6 +221,7 @@ public class LoginActivity extends AppCompatActivity{
         user.setEmail(email);
         user.setPassword(password);
         nextIntent.putExtra("UserData", (Serializable) user);
+        */
         //comment out next line when file system works
         nextIntent = new Intent(getBaseContext(), MainActivity.class);
         startActivity(nextIntent);
@@ -254,6 +231,8 @@ public class LoginActivity extends AppCompatActivity{
     public void attemptLoginExistingUser(){
         //grab email and password data from file
         //check against firebase
+
+
         //if valid then send user to main activity
         nextIntent = new Intent(getBaseContext(), MainActivity.class);
         startActivity(nextIntent);

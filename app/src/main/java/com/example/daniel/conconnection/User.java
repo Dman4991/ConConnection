@@ -12,6 +12,7 @@ public interface User{
     short getAge();
     String getBodyType();
     String getBiography();
+    boolean getAutoLogin();
 
     void setEmail(String email);
     void setPassword(String password);
@@ -19,4 +20,5 @@ public interface User{
     void setAge(short age);
     void setBodyType(String bodyType);
     void setBiography(String biography);
+    void setAutoLogin(boolean autoLogin);
 }

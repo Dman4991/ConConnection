@@ -2,6 +2,7 @@ package com.example.daniel.conconnection;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -28,6 +29,9 @@ import java.util.Date;
 public class CheckInFragment extends android.support.v4.app.Fragment {
     private static CheckInFragment instance;
 
+    private User user;
+    private FileManager fileManager;
+    private Context context;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     private Uri fileUri;
     private ImageView userPicture;
@@ -158,6 +162,9 @@ public class CheckInFragment extends android.support.v4.app.Fragment {
         //super.onActivityCreated(savedInstanceState);
 
         View rootView = inflater.inflate(R.layout.fragment_check_in, container, false);
+        context = getContext();
+        fileManager = new FileManager(context);
+        user = fileManager.readUserFromFile();
 //
 //        /*
 //            Code for GPS location initialization/call

@@ -1,6 +1,7 @@
 package com.example.daniel.conconnection;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -25,6 +26,10 @@ import java.util.Date;
 public class MatchingFragment extends android.support.v4.app.Fragment {
     private static MatchingFragment instance;
 
+    private User user = null;
+    private Context context;
+    private FileManager fileManager;
+
     private ImageView potentialMatchPicture;
     private Bitmap potentialMatchBitmap;
 
@@ -41,7 +46,10 @@ public class MatchingFragment extends android.support.v4.app.Fragment {
 
 
         View rootView = inflater.inflate(R.layout.fragment_matching, container, false);
-
+        context = getContext();
+        fileManager = new FileManager(context);
+        user = fileManager.readUserFromFile();
+        Log.d("File", "In Matching Fragment, user=" + user.toString());
 
         Button yesButton = (Button) rootView.findViewById(R.id.yesButton);
         Button noButton = (Button) rootView.findViewById(R.id.noButton);
