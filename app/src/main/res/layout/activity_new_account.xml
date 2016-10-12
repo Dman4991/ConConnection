@@ -20,13 +20,12 @@
         android:visibility="gone" />
 
     <ScrollView
-        android:id="@+id/account_form"
+        android:id="@+id/account_create_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
-
-            android:id="@+id/acount_login_form"
+            android:id="@+id/account_new_account_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -36,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Edit Account"
+                android:text="Create New Account"
                 android:id="@+id/textAccoutCreateEdit"
                 android:layout_gravity="center_horizontal" />
 
@@ -44,11 +43,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <AutoCompleteTextView
-                    android:id="@+id/name"
+                <EditText
+                    android:id="@+id/email_new_account"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Name"
+                    android:hint="email@domain.com"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
                     android:singleLine="true" />
@@ -60,13 +59,57 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/age"
+                    android:id="@+id/password_new_account"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/confirm_password_new_account"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Confirm Password"
+                    android:inputType="textPassword"
+                    android:maxLines="1" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <!--TODO Should be a spinner instead-->
+                <EditText
+                    android:id="@+id/gender_new_account"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Gender"
+                    android:inputType="text"
+                    android:maxLines="1" />
+
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/age_new_account"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Age"
                     android:inputType="number"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                    android:maxLines="1" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -74,13 +117,12 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/bodytype"
+                    android:id="@+id/bodytype_new_account"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Body Type"
                     android:inputType="text"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                    android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -89,7 +131,7 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/bio"
+                    android:id="@+id/bio_new_account"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Biography"
@@ -99,7 +141,7 @@
             </android.support.design.widget.TextInputLayout>
 
             <Button
-                android:id="@+id/account_done_button"
+                android:id="@+id/done_button_new_account"
                 style="@style/Widget.AppCompat.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
