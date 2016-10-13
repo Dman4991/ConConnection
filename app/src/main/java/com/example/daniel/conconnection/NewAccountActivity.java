@@ -63,16 +63,22 @@ public class NewAccountActivity extends AppCompatActivity {
                 mBodyType = (EditText) findViewById(R.id.bodytype_new_account);
                 mBiography = (EditText) findViewById(R.id.bio_new_account);
 
-
-
                 String email = mEmail.getText().toString();
                 String password = mPassword.getText().toString();
+                String confirmPassword = mConfirmPassword.getText().toString();
+                String gender = mGender.getText().toString();
+                String stringAge = mAge.getText().toString();
+                String bodyType = mBodyType.getText().toString();
+                String biography = mBiography.getText().toString();
 
-                if(email.length()==0 || password.length()==0){
+                if(email.length()==0 || password.length()==0 || confirmPassword.length()==0 || gender.length()==0 || stringAge.length()==0 || bodyType.length()==0 || biography.length()==0){
                     //if any are null, empty, or not valid
                     //bring user focus to error
-                    Toast.makeText(NewAccountActivity.this, "enter your email & password", Toast.LENGTH_SHORT).show();
-                } else{
+                    Toast.makeText(NewAccountActivity.this, "please enter all fields", Toast.LENGTH_SHORT).show();
+                } else if(password.equals(confirmPassword)) {
+                    Toast.makeText(NewAccountActivity.this, "password does not match confirm password", Toast.LENGTH_SHORT).show();
+                    //Email pattern match
+                } else {
                     //else
                     //write to firebase
                     //write to file
