@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity{
         if(!isNewUser()){
             //currently there is no way for user to set autologin back to true once they hit the logout button which sets it to false
             //Following line is to force auto login if a user file exist, TODO delete following line once we understand how we want to logoff
-            user.setAutoLogin(true);
+            //user.setAutoLogin(true);
             if(user.getAutoLogin()){
                 attemptLoginExistingUser();
             }
@@ -115,23 +115,7 @@ public class LoginActivity extends AppCompatActivity{
                     Toast.makeText(LoginActivity.this, "enter your password", Toast.LENGTH_SHORT).show();
                 } else {
                     //Valid input, attempt login
-
-                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            Log.d("signIn", "signInWithEmail:onComplete:" + task.isSuccessful());
-                            // If sign in fails, display a message to the user. If sign in succeeds
-                            // the auth state listener will be notified and logic to handle the
-                            // signed in user can be handled in the listener.
-                            if (!task.isSuccessful()) {
-                                Log.w("signIn", "signInWithEmail:failed", task.getException());
-                                Toast.makeText(LoginActivity.this, "do", Toast.LENGTH_SHORT).show();
-                            } else {//Logged in
-                                nextIntent = new Intent(getBaseContext(), MainActivity.class);
-                                startActivity(nextIntent);
-                            }
-                        }
-                    });
+                    login(email, password);
                     /*try {
                         Log.d("Login","New user login");
                         attemptLoginNewUser();
@@ -139,6 +123,16 @@ public class LoginActivity extends AppCompatActivity{
                         e.printStackTrace();
                     }*/
                 }
+            }
+        });
+
+        Button newAccountButton = (Button) findViewById(R.id.create_new_account_sign_in_button);
+        assert newAccountButton != null;
+        newAccountButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                nextIntent = new Intent(getBaseContext(), NewAccountActivity.class);
+                startActivity(nextIntent);
             }
         });
 
@@ -231,8 +225,11 @@ public class LoginActivity extends AppCompatActivity{
     public void attemptLoginExistingUser(){
         //grab email and password data from file
         //check against firebase
+        user = fileManager.readUserFromFile();
+        String email = user.getEmail();
+        String password = user.getPassword();
 
-
+        login(email, password);
         //if valid then send user to main activity
         nextIntent = new Intent(getBaseContext(), MainActivity.class);
         startActivity(nextIntent);
@@ -246,6 +243,29 @@ public class LoginActivity extends AppCompatActivity{
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
         return password.length() > 4;
+    }
+
+
+
+    private void login(String email, String password){
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                Log.d("signIn", "signInWithEmail:onComplete:" + task.isSuccessful());
+                // If sign in fails, display a message to the user. If sign in succeeds
+                // the auth state listener will be notified and logic to handle the
+                // signed in user can be handled in the listener.
+                if (!task.isSuccessful()) {
+                    Log.w("signIn", "signInWithEmail:failed", task.getException());
+                    Toast.makeText(LoginActivity.this, "login failed", Toast.LENGTH_SHORT).show();
+                } else {//Logged in
+                    //Upload user object to firebase
+
+                    nextIntent = new Intent(getBaseContext(), MainActivity.class);
+                    startActivity(nextIntent);
+                }
+            }
+        });
     }
 }
 
