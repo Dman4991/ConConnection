@@ -29,8 +29,8 @@ import java.io.File;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private FirebaseStorage storage;
-    private StorageReference myStorageRef;
+//    private FirebaseStorage storage;
+//    private StorageReference myStorageRef;
 
     private User user;
     private FileManager fileManager;
@@ -39,8 +39,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("onCreate", "mainActivity onCreate");
-        storage = FirebaseStorage.getInstance();
+//        Log.d("onCreate", "mainActivity onCreate");
+//        storage = FirebaseStorage.getInstance();
 
         context = getApplicationContext();
         fileManager = new FileManager(context);
@@ -52,30 +52,30 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Log.d("onCreate", "storageRef");
-        myStorageRef = storage.getReferenceFromUrl("gs://conconnection-33940.appspot.com");
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), "ConConnection");
-        File[] files = mediaStorageDir.listFiles();
-        if(files!=null) {
-            Uri fileUri = Uri.fromFile(files[0]);
-            Log.d("onCreate", files[0].getAbsolutePath());
-            StorageReference imageRef = myStorageRef.child(files[0].getName());
-            imageRef.putFile(fileUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    //Get a URL to the uploaded content
-                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                    Log.d("onCreate", downloadUrl.toString());
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    //Handle unsuccesssful uploads
-                    Log.d("onCreate", e.getMessage());
-                }
-            });
-        }
+//        Log.d("onCreate", "storageRef");
+//        myStorageRef = storage.getReferenceFromUrl("gs://conconnection-33940.appspot.com");
+//        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+//                Environment.DIRECTORY_PICTURES), "ConConnection");
+//        File[] files = mediaStorageDir.listFiles();
+//        if(files!=null) {
+//            Uri fileUri = Uri.fromFile(files[0]);
+//            Log.d("onCreate", files[0].getAbsolutePath());
+//            StorageReference imageRef = myStorageRef.child(files[0].getName());
+//            imageRef.putFile(fileUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                @Override
+//                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                    //Get a URL to the uploaded content
+//                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
+//                    Log.d("onCreate", downloadUrl.toString());
+//                }
+//            }).addOnFailureListener(new OnFailureListener() {
+//                @Override
+//                public void onFailure(@NonNull Exception e) {
+//                    //Handle unsuccesssful uploads
+//                    Log.d("onCreate", e.getMessage());
+//                }
+//            });
+//        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

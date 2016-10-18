@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -19,6 +20,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -252,6 +261,7 @@ public class CheckInFragment extends android.support.v4.app.Fragment {
                 try {
                     userPictureBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), fileUri);
                     userPicture.setImageBitmap(userPictureBitmap);
+                    uploadPictureToFirebase(fileUri);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
@@ -259,5 +269,32 @@ public class CheckInFragment extends android.support.v4.app.Fragment {
                 }
             }
         }
+    }
+
+
+
+    public void uploadPictureToFirebase(Uri photoUri) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference myStorageRef = storage.getReferenceFromUrl("gs://conconnection-33940.appspot.com");
+
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        File photoFile = new File(photoUri.getPath());
+
+        StorageReference photoRef = myStorageRef.child("userPhotos").child(firebaseUser.getUid()).child(photoFile.getName());
+        photoRef.putFile(photoUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                //Get a URL to the uploaded content
+                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                Log.d("uploadPictureToFirebase", downloadUrl.toString());
+                //Delete old photo
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                //Handle unsuccesssful uploads
+                Log.d("uploadPictureToFirebase", e.getMessage());
+            }
+        });
     }
 }
