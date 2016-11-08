@@ -45,7 +45,11 @@ public class MainActivity extends AppCompatActivity
         context = getApplicationContext();
         fileManager = new FileManager(context);
         user = fileManager.readUserFromFile();
-        Log.d("File", "From MainActivity user="+user.toString());
+        if(user != null) {
+            Log.d("File", "From MainActivity user=" + user.toString());
+        }else {
+            Log.d("File", "From MainActivity user=" + "NULL");
+        }
         //for checking logout functionality
 
         setContentView(R.layout.activity_main);

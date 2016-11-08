@@ -49,7 +49,11 @@ public class MatchingFragment extends android.support.v4.app.Fragment {
         context = getContext();
         fileManager = new FileManager(context);
         user = fileManager.readUserFromFile();
-        Log.d("File", "In Matching Fragment, user=" + user.toString());
+        if(user != null) {
+            Log.d("File", "In Matching Fragment, user=" + user.toString());
+        }else {
+            Log.d("File", "In Matching Fragment, user=" + "NULL");
+        }
 
         Button yesButton = (Button) rootView.findViewById(R.id.yesButton);
         Button noButton = (Button) rootView.findViewById(R.id.noButton);

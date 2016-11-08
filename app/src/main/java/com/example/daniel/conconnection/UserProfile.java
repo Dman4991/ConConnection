@@ -9,7 +9,7 @@ public class UserProfile implements User, Serializable{
     private String email;
     private String password;
     private String name;
-    private short age;
+    private int age;
     private String bodyType;
     private String biography;
     private ArrayList<Integer> events;
@@ -28,7 +28,7 @@ public class UserProfile implements User, Serializable{
         autoLogin = false;
     }
 
-    public UserProfile(String email, String password, String name, short age, String bodyType, String biography, ArrayList<Integer> myEvents){
+    public UserProfile(String email, String password, String name, int age, String bodyType, String biography, ArrayList<Integer> myEvents){
         this.email = email;
         this.password = password;
         this.name = name;
@@ -82,7 +82,7 @@ public class UserProfile implements User, Serializable{
     public String getEmail(){return email;}
     public String getPassword(){return password;}
     public String getName(){return name;}
-    public short getAge(){return age;}
+    public int getAge(){return age;}
     public String getBodyType(){return bodyType;}
     public String getBiography(){return biography;}
     public ArrayList<Integer> getEvents(){return events;}
@@ -92,7 +92,7 @@ public class UserProfile implements User, Serializable{
     public void setEmail(String email){this.email = email;}
     public void setPassword(String password){this.password = password;}
     public void setName(String name){this.name = name;}
-    public void setAge(short age){this.age = age;}
+    public void setAge(int age){this.age = age;}
     public void setBodyType(String bodyType){this.bodyType = bodyType;}
     public void setBiography(String biography){this.biography = biography;}
     public void setAutoLogin(boolean autoLogin){this.autoLogin = autoLogin;}

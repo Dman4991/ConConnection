@@ -276,11 +276,9 @@ public class CheckInFragment extends android.support.v4.app.Fragment {
     public void uploadPictureToFirebase(Uri photoUri) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference myStorageRef = storage.getReferenceFromUrl("gs://conconnection-33940.appspot.com");
-
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        File photoFile = new File(photoUri.getPath());
 
-        StorageReference photoRef = myStorageRef.child("userPhotos").child(firebaseUser.getUid()).child(photoFile.getName());
+        StorageReference photoRef = myStorageRef.child("userPhotos").child(firebaseUser.getUid()).child("userPhoto");
         photoRef.putFile(photoUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
