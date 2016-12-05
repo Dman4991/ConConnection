@@ -150,9 +150,14 @@ public class MainActivity extends AppCompatActivity
 //            fragmentManager.beginTransaction()
 //                    .remove(fragmentManager.findFragmentById(R.id.content_frame))
 //                    .commit();
-            fragmentManager.beginTransaction()
+          /*  fragmentManager.beginTransaction()
                     .replace(R.id.content_frame, CheckInFragment.getInstance())
                     .commit();
+            getSupportActionBar().setTitle("Check In");
+            */
+              fragmentManager.beginTransaction()
+                      .replace(R.id.content_frame, SelectEventFragment.getInstance())
+                      .commit();
             getSupportActionBar().setTitle("Check In");
         } else if (id == R.id.nav_accout_management) {
             fragmentManager.beginTransaction()

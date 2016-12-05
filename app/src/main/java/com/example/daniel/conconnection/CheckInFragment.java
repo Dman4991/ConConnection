@@ -33,14 +33,19 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class CheckInFragment extends android.support.v4.app.Fragment {
     private static CheckInFragment instance;
 
+    private GPSManager gpsManager;
+    private ArrayList<Double> locationData;
+
     private User user;
     private FileManager fileManager;
     private Context context;
+
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     private Uri fileUri;
     private ImageView userPicture;
@@ -174,55 +179,9 @@ public class CheckInFragment extends android.support.v4.app.Fragment {
         context = getContext();
         fileManager = new FileManager(context);
         user = fileManager.readUserFromFile();
-//
-//        /*
-//            Code for GPS location initialization/call
-//         */
-//
-//        final LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-//        LocationListener locationListener = new LocationListener() {
-//            @Override
-//            public void onLocationChanged(Location location) {
-//                /*
-//                    To view GPS data, run in debug mode then go to android monitor, should continuously update location data.
-//                        TODO: Make it
-//                            - A a few GPS calls when check-in event is running.
-//                 */
-//                String myLocation = "Latitude: " + location.getLatitude() + "\nLongitude: " + location.getLongitude();
-//                Log.d("GPS", myLocation);
-//            }
-//
-//            @Override
-//            public void onStatusChanged(String provider, int status, Bundle extras) {
-//
-//            }
-//
-//            @Override
-//            public void onProviderEnabled(String provider) {
-//
-//            }
-//
-//            @Override
-//            public void onProviderDisabled(String provider) {
-//
-//            }
-//        };
-//
-//        //should explicitly check if permision is available
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            // TODO: Consider calling
-//            //    ActivityCompat#requestPermissions
-//            // here to request the missing permissions, and then overriding
-//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//            //                                          int[] grantResults)
-//            // to handle the case where the user grants the permission. See the documentation
-//            // for ActivityCompat#requestPermissions for more details.
-//            return;
-//        }
-//        Log.i("GPS",  "Before GPS request");
-//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-//        Log.i("GPS", "After GPS request");
 
+        gpsManager = new GPSManager(context);
+        locationData = gpsManager.getLocation();    //returns an ArrayList<Double> of (longitude, latitude)
 
         userPicture = (ImageView) rootView.findViewById(R.id.userPicture);
         if(userPictureBitmap != null){//Restore bitmap if it was previously set before being inflated
@@ -276,9 +235,11 @@ public class CheckInFragment extends android.support.v4.app.Fragment {
     public void uploadPictureToFirebase(Uri photoUri) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference myStorageRef = storage.getReferenceFromUrl("gs://conconnection-33940.appspot.com");
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        StorageReference photoRef = myStorageRef.child("userPhotos").child(firebaseUser.getUid()).child("userPhoto");
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        File photoFile = new File(photoUri.getPath());
+
+        StorageReference photoRef = myStorageRef.child("userPhotos").child(firebaseUser.getUid()).child(photoFile.getName());
         photoRef.putFile(photoUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
