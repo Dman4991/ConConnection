@@ -48,6 +48,7 @@ public class SelectEventFragment extends android.support.v4.app.Fragment {
 
     private GPSManager gpsManager;
     private ArrayList<Double> locationData;
+    private ArrayList<Event> listOfEvents;
 
     //file manager will be used to add events to the user object
     private User user;
@@ -73,14 +74,28 @@ public class SelectEventFragment extends android.support.v4.app.Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_select_event, container, false);
         context = getContext();
-        //    fileManager = new FileManager(context);
-        //    user = fileManager.readUserFromFile();
+        listOfEvents = new ArrayList<Event>();
+
+        fileManager = new FileManager(context);
+        user = fileManager.readUserFromFile();
 
         gpsManager = new GPSManager(context);
         //locationData = gpsManager.getLocation();    //returns an ArrayList<Double> of (longitude, latitude)
 
+        //Create fake events
+        Date todaysDate = new Date();
+        Date nextYearDate = new Date();
+        nextYearDate.setYear(2020);
+        Event universityEvent = new Event("University Event", 34.057382, -117.822887, todaysDate, nextYearDate);
+        Event dtlaEvent = new Event("DTLA Event", 34.040858, -118.268601, todaysDate, nextYearDate);
+        Event fakeEvent = new Event("Fake Event", 99, -99, todaysDate, nextYearDate);
+        listOfEvents.add(0, universityEvent);
+        listOfEvents.add(1, dtlaEvent);
+        listOfEvents.add(2, fakeEvent);
+
         setUniversityEventButton(rootView);
         setDTLAEventButton(rootView);
+        setGoToPictureButton(rootView);
 
         return rootView;
     }
@@ -91,17 +106,19 @@ public class SelectEventFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
                 Log.d("GPS", "University Event Clicked");
-                double longitudeEvent = 34.057382;
-                double latitudeEvent = -117.822887;
-                locationData = gpsManager.getLocation();
+                double longitudeEvent = listOfEvents.get(0).getLocation().get(0);
+                double latitudeEvent = listOfEvents.get(0).getLocation().get(1);
                 Log.d("GPS", "Select Event About to request location update");
+                locationData = gpsManager.getLocation();
                 Log.d("GPS", "Select Event After request location update long="+locationData.get(0)+" lat="+locationData.get(1));
                 if(inRange(longitudeEvent, latitudeEvent)){
+                    //add event to user's event list, write user to file
+                    user.addEvent(listOfEvents.get(0));
+                    fileManager.writeUserToFile(user);
+
                     Toast.makeText(context, "Successful check in", Toast.LENGTH_SHORT).show();
                     //change to CheckInFragment
-                    getFragmentManager().beginTransaction()
-                            .replace(R.id.content_frame, CheckInFragment.getInstance())
-                            .commit();
+                    transitionToCheckInFragment();
                 }
                 else{
                     Toast.makeText(context, "Too far from event", Toast.LENGTH_SHORT).show();
@@ -116,21 +133,44 @@ public class SelectEventFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
                 Log.d("GPS", "DTLA Event Clicked");
-                double longitudeEvent = 34.040858;
-                double latitudeEvent = -118.268601;
+                double longitudeEvent = listOfEvents.get(1).getLocation().get(0);
+                double latitudeEvent = listOfEvents.get(1).getLocation().get(1);
                 locationData = gpsManager.getLocation();
                 if(inRange(longitudeEvent, latitudeEvent)){
+                    //add event to user's list of events, write to file
+                    user.addEvent(listOfEvents.get(1));
+                    fileManager.writeUserToFile(user);
+
                     Toast.makeText(context, "Successful check in", Toast.LENGTH_SHORT).show();
                     //change to CheckInFragment
-                    getFragmentManager().beginTransaction()
-                            .replace(R.id.content_frame, CheckInFragment.getInstance())
-                            .commit();
+                    transitionToCheckInFragment();
                 }
                 else{
                     Toast.makeText(context, "Too far from event", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    private void setGoToPictureButton(View rootView){
+        Button gotoPicButton = (Button) rootView.findViewById(R.id.goto_picture_event_button);
+        gotoPicButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                //always write fake event to user's list of events
+                user.addEvent(listOfEvents.get(2));
+                fileManager.writeUserToFile(user);
+
+                Log.d("GPS", "GOTO take picture");
+                transitionToCheckInFragment();
+            }
+        });
+    }
+
+    public void transitionToCheckInFragment(){
+        getFragmentManager().beginTransaction()
+                .replace(R.id.content_frame, CheckInFragment.getInstance())
+                .commit();
     }
 
     /**

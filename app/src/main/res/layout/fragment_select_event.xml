@@ -15,4 +15,10 @@
         android:layout_height="wrap_content"
         android:text="Convention Center DTLA Event"/>
 
+    <Button
+        android:id="@+id/goto_picture_event_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="(Go to take picture) Fake Event"/>
+
 </LinearLayout>

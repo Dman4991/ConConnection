@@ -128,7 +128,7 @@ public class NewAccountActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                         } else {//Logged in
                             //Upload user object to firebase
-                            User newUser = new UserProfile(email, password, name, age, bodyType, biography, new ArrayList<Integer>());
+                            User newUser = new UserProfile(email, password, name, age, bodyType, biography, new ArrayList<Event>());
                             String uId = FirebaseAuth.getInstance().getCurrentUser().getUid();
                             DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
                             mDatabase.child("userIds").push().setValue(uId);
